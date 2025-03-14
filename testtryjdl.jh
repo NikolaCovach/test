@@ -1,0 +1,55 @@
+entity Unit {
+    numberOfRooms Integer required,
+    accommodationType AccommodationType required,
+    floor Integer required,
+    cost BigDecimal required,
+    description String,
+    isAvailable Boolean required
+}
+
+entity Booking {
+    startDate LocalDate required,
+    endDate LocalDate required,
+    status BookingStatus required,
+    bookingDate LocalDate required,
+    cancellationDate LocalDate
+}
+
+entity Payment {
+    amount BigDecimal required,
+    paymentDate LocalDate required,
+    isPaid Boolean required
+}
+
+entity Event {
+    eventType EventType required,
+    eventDate LocalDate required
+}
+
+enum AccommodationType {
+    HOME, FLAT, APARTMENTS
+}
+
+enum BookingStatus {
+    PENDING, CONFIRMED, CANCELLED
+}
+
+enum EventType {
+    UNIT_CREATED, UNIT_UPDATED, UNIT_BOOKED, UNIT_CANCELLED
+}
+
+relationship ManyToOne {   
+    Booking{unit} to Unit,
+    Payment{booking} to Booking
+}
+
+relationship OneToMany {
+    Unit{bookings} to Booking,
+    Unit{events} to Event
+}
+
+relationship ManyToOne {
+    Event{unit} to Unit
+}
+
+paginate User, Unit, Booking, Payment with pagination
