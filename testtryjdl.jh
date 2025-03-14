@@ -1,0 +1,81 @@
+application {
+  config {
+    baseName Booking
+    applicationType monolith
+    authenticationType jwt
+    buildTool gradle
+    cacheProvider no
+    clientFramework angular
+    databaseType sql
+    devDatabaseType postgresql
+    dtoSuffix Dto
+    enableSwaggerCodegen true
+    languages [en,ru]
+    nativeLanguage ru
+    packageName com.example.tool
+    prodDatabaseType postgresql
+    reactive false
+    serverPort 8080
+  }
+  entities *
+ }
+
+entity Unit {
+    numberOfRooms Integer required,
+    accommodationType AccommodationType required,
+    floor Integer required,
+    cost BigDecimal required,
+    description String,
+    isAvailable Boolean required
+}
+
+entity Booking {
+    startDate LocalDate required,
+    endDate LocalDate required,
+    status BookingStatus required,
+    bookingDate LocalDate required,
+    cancellationDate LocalDate
+}
+
+entity Payment {
+    amount BigDecimal required,
+    paymentDate LocalDate required,
+    isPaid Boolean required
+}
+
+
+enum AccommodationType {
+    HOME, FLAT, APARTMENTS
+}
+
+enum BookingStatus {
+    PENDING, CONFIRMED, CANCELLED
+}
+
+enum EventType {
+    UNIT_CREATED, UNIT_UPDATED, UNIT_BOOKED, UNIT_CANCELLED
+}
+
+relationship ManyToOne {   
+    Booking{unit} to Unit,
+    Payment{booking} to Booking
+}
+
+relationship OneToMany {
+    Unit{bookings} to Booking,
+}
+
+
+paginate Unit, Booking, Payment with pagination
+
+
+filter Unit, Booking, Payment
+
+// Use Data Transfer Objects (DTO)
+// dto * with mapstruct
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceClass
+service all with serviceImpl
